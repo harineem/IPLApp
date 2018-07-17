@@ -149,25 +149,34 @@ Row
 
 
 ```{r cache=FALSE}
-col1 = col
-
-df <- reactive({
-  if(input$team == "All"){
-   
-    data.frame(ipl)
-  }
-  else {
-    
-     col1 = col[input$team]
-   
-    data.frame(dplyr::filter(ipl,Team==input$team))
-  }
-})
+col_fil = col
+dreact<-reactiveValues(df=ipl,df_bat=batsmen,df_bowl=bowlers,col_fil=col,sz=.5,pt_sz=3)
+observeEvent(input$team,
+        {   if(input$team != "All") {
+              dreact$df<-data.frame(dplyr::filter(ipl,Team==input$team))
+              dreact$df_bat<-data.frame(dplyr::filter(batsmen,Team==input$team))
+              dreact$df_bowl<-data.frame(dplyr::filter(bowlers,Team==input$team))
+              dreact$sz<-1
+              dreact$pt_sz<-4
+              dreact$col_fil=col[input$team]
+        }  else {
+            dreact$df<-ipl
+              dreact$df_bat<-batsmen
+              dreact$df_bowl<-bowlers
+              dreact$sz<-.5
+              dreact$pt_sz<-3
+              dreact$col_fil=col
+          
+          } 
+          
+        }
+      )
 
 
 renderPlotly({
-  p<-plot_ly(df()) %>%
-        add_bars(x = ~Num, y = ~Runs, color = ~Team,colors=col1,width=1,
+  
+  p<-plot_ly(dreact$df) %>%
+        add_bars(x = ~Num, y = ~Runs, color = ~Team,colors=dreact$col_fil,width=1,
                  text = ~Match,hoverinfo="text+y",textposition = 'auto',inherit=FALSE,
                  marker = list(
                                line = list(color = 'rgb(8,48,107)', width = 1.5,face="bold")
@@ -231,36 +240,7 @@ Individual
 ### Best Batsmen IPL 2018 (The graph is sorted by Strike Rate) Best Strike Rate:Gowtham(RR), Most Runs: Kane Williamson(SRH)</span>
 
 ```{r}
-sz = .5
-pt_sz = 3
 
-df_bat <- reactive({
-  if(input$team == "All"){
-   
-    data.frame(batsmen)
-  }
-  else {
-    
-    
-    data.frame(dplyr::filter(batsmen,Team==input$team))
-  }
-})
-sz<-reactive({
-  if(input$team!="All") {
-    sz=1
-  } else {
-    sz=.5
-  }
-  
-})
-pt_sz<-reactive({
-   if(input$team!="All") {
-    pt_sz=4
-  } else {
-    pt_sz=3
-  }
-  
-})
 
 renderPlotly( {
   #geom_segment(data=df, aes(x=start_int, xend=end_int, y=ids, yend=ids), size=11, colour="red") + 
@@ -268,14 +248,14 @@ renderPlotly( {
   #geom_segment(data=df, aes(x=(start_int+0.1), xend=(end_int-0.1), y=ids, yend=ids), size=10)
  
 
-gg<-ggplot(df_bat(), aes(x=reorder(Player,SR,sum), y=Runs,color=Team,label1=Player,label2=SR)) + 
-  geom_point(size=pt_sz()) + 
+gg<-ggplot(dreact$df_bat, aes(x=reorder(Player,SR,sum), y=Runs,color=Team,label1=Player,label2=SR)) + 
+  geom_point(size=dreact$pt_sz) + 
   geom_segment(aes(x=Player, 
                    xend=Player, 
                    y=0, 
-                   yend=Runs),size=sz()) + 
+                   yend=Runs),size=dreact$sz) + 
   labs( y="Runs", x="Batsmen")+
-  scale_color_manual(values = col1) +
+  scale_color_manual(values = dreact$col_fil) +
   scale_size_continuous(range = c(2, 7))+
   theme(plot.title=element_text(tfont),  # title
         axis.title.y=element_text(size=11),  # Y axis title
@@ -311,18 +291,9 @@ gg<-ggplot(df_bat(), aes(x=reorder(Player,SR,sum), y=Runs,color=Team,label1=Play
 
 ```{r}
 
-df_bowl <- reactive({
-  if(input$team == "All"){
-    
-    data.frame(bowlers)
-  }
-  else {
-    
-    data.frame(dplyr::filter(bowlers,Team==input$team))
-  }
-})
+
 renderPlotly({
-gg<-ggplot(data =df_bowl(),mapping= aes(label1=Player,label2=SR,label3=Wkts,label4=Econ,x=reorder(Player,Wkts,sum),y=Wkts))+
+gg<-ggplot(dreact$df_bowl,mapping= aes(label1=Player,label2=SR,label3=Wkts,label4=Econ,x=reorder(Player,Wkts,sum),y=Wkts))+
 	geom_jitter(color="white", size=10) +
 	geom_jitter(mapping=aes(fill=Team,size=1000/Econ))+
 	 geom_segment(aes(x=Player, 
@@ -332,7 +303,7 @@ gg<-ggplot(data =df_bowl(),mapping= aes(label1=Player,label2=SR,label3=Wkts,labe
                linetype="solid", 
                size=0.1) +
 	labs( y="Wickets", x="Bowler")+
-	scale_fill_manual(values = col1) +
+	scale_fill_manual(values = col_fil) +
 	scale_size_continuous(range = c(2, 7))+
 	theme(plot.title=element_text(size=15, 
                                     face="bold", 
