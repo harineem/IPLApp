@@ -150,22 +150,26 @@ Row
 
 ```{r cache=FALSE}
 col_fil = col
-dreact<-reactiveValues(df=ipl,df_bat=batsmen,df_bowl=bowlers,col_fil=col,sz=.5,pt_sz=3)
+dreact<-reactiveValues(df=ipl,df_bat=batsmen,df_bowl=bowlers,col_fil=col,sz=.5,pt_sz=3,bwl_jitt_col="white")
 observeEvent(input$team,
         {   if(input$team != "All") {
               dreact$df<-data.frame(dplyr::filter(ipl,Team==input$team))
               dreact$df_bat<-data.frame(dplyr::filter(batsmen,Team==input$team))
               dreact$df_bowl<-data.frame(dplyr::filter(bowlers,Team==input$team))
+             
               dreact$sz<-1
               dreact$pt_sz<-4
               dreact$col_fil=col[input$team]
+              dreact$bwl_jitt_col='#F3F3F3'
         }  else {
             dreact$df<-ipl
               dreact$df_bat<-batsmen
               dreact$df_bowl<-bowlers
+              
               dreact$sz<-.5
               dreact$pt_sz<-3
               dreact$col_fil=col
+              dreact$bwl_jitt_col='white'
           
           } 
           
@@ -201,8 +205,9 @@ renderPlotly({
 
 
 ```{r}
+
 gg<-ggplot(iplsummary, aes(Winner,fill=Loser)) +
-  geom_bar(color="white",width=0.5) +
+  geom_bar(color="white",width=0.2) +
   labs(title="", y="Losers", x="Winners")+
   scale_fill_manual(values = col)+
   theme(plot.title=element_text(),  # title
@@ -294,7 +299,7 @@ gg<-ggplot(dreact$df_bat, aes(x=reorder(Player,SR,sum), y=Runs,color=Team,label1
 
 renderPlotly({
 gg<-ggplot(dreact$df_bowl,mapping= aes(label1=Player,label2=SR,label3=Wkts,label4=Econ,x=reorder(Player,Wkts,sum),y=Wkts))+
-	geom_jitter(color="white", size=10) +
+	geom_jitter(color=dreact$bwl_jitt_col, size=10) +
 	geom_jitter(mapping=aes(fill=Team,size=1000/Econ))+
 	 geom_segment(aes(x=Player, 
                    xend=Player, 
