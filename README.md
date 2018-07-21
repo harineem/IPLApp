@@ -7,4 +7,4 @@ The datasets were created by going over each match result in ESPNCricinfo site a
 # Shiny version
 The shiny version of the Dashboard is at 
 https://harineem.shinyapps.io/ipl2018dash/
-Some slowness issues exist, try to fix as I am beginner
+
