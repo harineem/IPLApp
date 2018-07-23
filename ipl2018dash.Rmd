@@ -10,11 +10,13 @@ output:
       author: Harinee Mosur Narasimhan
       source: https://github.com/harineem/IPLApp
 --- 
-<meta property="og:site_name" content="My IPL 2018 Dashboard"/>
-<meta property="og:title" content="IPL 2018 Dashboard done in R ."/>
-<meta property="og:description" content="Visual summary of IPL 2018 that I have done using R. The packages used are ggplot2, plotly and tidyverse"/>
-<meta property="og:image" content="thumbnail.png">
-<meta property="og:type" content="website"/>
+<meta prefix="og: http://ogp.me/ns#" property="og:site_name" content="My IPL 2018 Dashboard"/>
+<meta prefix="og: http://ogp.me/ns#" property="og:title" content="IPL 2018 Dashboard done in R ."/>
+<meta prefix="og: http://ogp.me/ns#" property="og:description" content="Visual summary of IPL 2018 that I have done using R. The packages used are ggplot2, plotly and tidyverse"/>
+<meta prefix="og: http://ogp.me/ns#" property="og:image" content="thumbnail.png">
+<meta prefix="og: http://ogp.me/ns#" property="og:type" content="website"/>
+
+
 <style>                     
 .navbar {
   background-color:darkblue;
