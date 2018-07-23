@@ -8,7 +8,13 @@ output:
       logo: icon.png
       theme: flatly
       author: Harinee Mosur Narasimhan
+      source: https://github.com/harineem/IPLApp
 --- 
+<meta property="og:site_name" content="My IPL 2018 Dashboard"/>
+<meta property="og:title" content="IPL 2018 Dashboard done in R ."/>
+<meta property="og:description" content="Visual summary of IPL 2018 that I have done using R. The packages used are ggplot2, plotly and tidyverse"/>
+<meta property="og:image" content="thumbnail.png">
+<meta property="og:type" content="website"/>
 <style>                     
 .navbar {
   background-color:darkblue;
@@ -150,61 +156,34 @@ Row
 
 
 ```{r cache=FALSE}
-<<<<<<< HEAD
 
-=======
-col_fil = col
-dreact<-reactiveValues(df=ipl,df_bat=batsmen,df_bowl=bowlers,col_fil=col,sz=.5,pt_sz=3,bwl_jitt_col="white")
->>>>>>> 11eeecc5bce837967e968bb1155c7449ecdbb9ea
 observeEvent(input$team,
         {   if(input$team != "All") {
               dreact$df<-data.frame(dplyr::filter(ipl,Team==input$team))
               dreact$df_bat<-data.frame(dplyr::filter(batsmen,Team==input$team))
               dreact$df_bowl<-data.frame(dplyr::filter(bowlers,Team==input$team))
-<<<<<<< HEAD
-=======
-             
->>>>>>> 11eeecc5bce837967e968bb1155c7449ecdbb9ea
               dreact$sz<-1
               dreact$pt_sz<-4
               dreact$col_fil=col[input$team]
               dreact$bwl_jitt_col='#F3F3F3'
-<<<<<<< HEAD
               dreact$annt=""
         }  else {
               dreact$df<-ipl
               dreact$df_bat<-batsmen
               dreact$df_bowl<-bowlers
-=======
-        }  else {
-            dreact$df<-ipl
-              dreact$df_bat<-batsmen
-              dreact$df_bowl<-bowlers
-              
->>>>>>> 11eeecc5bce837967e968bb1155c7449ecdbb9ea
               dreact$sz<-.5
               dreact$pt_sz<-3
               dreact$col_fil=col
               dreact$bwl_jitt_col='white'
-<<<<<<< HEAD
               dreact$annt=ann
         } 
-=======
-          
-          } 
->>>>>>> 11eeecc5bce837967e968bb1155c7449ecdbb9ea
           
         }
       )
 
 
 renderPlotly({
-<<<<<<< HEAD
   p<- plot_ly(dreact$df) %>%
-=======
-  
-  p<-plot_ly(dreact$df) %>%
->>>>>>> 11eeecc5bce837967e968bb1155c7449ecdbb9ea
         add_bars(x = ~Num, y = ~Runs, color = ~Team,colors=dreact$col_fil,width=1,
                  text = ~Match,hoverinfo="text+y",textposition = 'auto',inherit=FALSE,
                  marker = list(
@@ -226,12 +205,7 @@ renderPlotly({
 
 
 
-<<<<<<< HEAD
 ```{r }
-=======
-```{r}
-
->>>>>>> 11eeecc5bce837967e968bb1155c7449ecdbb9ea
 gg<-ggplot(iplsummary, aes(Winner,fill=Loser)) +
   geom_bar(color="white",width=0.2) +
   labs(title="", y="Losers", x="Winners")+
@@ -269,7 +243,6 @@ Individual
 -------------------------------------
 ### Best Batsmen IPL 2018 (The graph is sorted by Strike Rate) Best Strike Rate:Gowtham(RR), Most Runs: Kane Williamson(SRH)</span>
 
-<<<<<<< HEAD
 ```{r }
 
 
@@ -302,45 +275,6 @@ renderPlotly( {
             ,legend.position = "None"
       ) +
     coord_flip()
-=======
-```{r}
-
-
-renderPlotly( {
-  #geom_segment(data=df, aes(x=start_int, xend=end_int, y=ids, yend=ids), size=11, colour="red") + 
-
-  #geom_segment(data=df, aes(x=(start_int+0.1), xend=(end_int-0.1), y=ids, yend=ids), size=10)
- 
-
-gg<-ggplot(dreact$df_bat, aes(x=reorder(Player,SR,sum), y=Runs,color=Team,label1=Player,label2=SR)) + 
-  geom_point(size=dreact$pt_sz) + 
-  geom_segment(aes(x=Player, 
-                   xend=Player, 
-                   y=0, 
-                   yend=Runs),size=dreact$sz) + 
-  labs( y="Runs", x="Batsmen")+
-  scale_color_manual(values = dreact$col_fil) +
-  scale_size_continuous(range = c(2, 7))+
-  theme(plot.title=element_text(tfont),  # title
-        axis.title.y=element_text(size=11),  # Y axis title
-        axis.text.y=element_text(family="Georgia",
-                                 color="black",size=7,face="bold"),
-        panel.background = element_rect(fill = 'white'),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_line(colour = "tomato", 
-                                        size=.25, 
-                                        linetype = "dashed"),
-        panel.border = element_blank(),
-        axis.line.x = element_line(colour = "darkorange", 
-                                   size=1.5, 
-                                   lineend = "butt"),
-        axis.line.y = element_line(colour = "darkorange", 
-                                   size=1.5)
-        
-        ,legend.position = "None"
-  ) +
-  coord_flip()
->>>>>>> 11eeecc5bce837967e968bb1155c7449ecdbb9ea
 
    p<-ggplotly(gg, tooltip = c("label1","label2","y")) %>%layout(showlegend = FALSE,plot_bgcolor = 'rgb(243, 243,   243)')
 
@@ -357,7 +291,6 @@ gg<-ggplot(dreact$df_bat, aes(x=reorder(Player,SR,sum), y=Runs,color=Team,label1
 ```{r cache=FALSE}
 
 
-<<<<<<< HEAD
 renderPlotly({
   gg<-ggplot(dreact$df_bowl,mapping= 
       aes(label1=Player,label2=SR,label3=Wkts,label4=Econ,x=reorder(Player,Wkts,sum),y=Wkts))+
@@ -398,48 +331,6 @@ renderPlotly({
      coord_flip()
     p<-ggplotly(gg, tooltip = c("label1","label2","label3","label4","colour"))%>%layout(plot_bgcolor = 'rgb(243, 243, 243)',showlegend = FALSE)
     p
-=======
-
-renderPlotly({
-gg<-ggplot(dreact$df_bowl,mapping= aes(label1=Player,label2=SR,label3=Wkts,label4=Econ,x=reorder(Player,Wkts,sum),y=Wkts))+
-	geom_jitter(color=dreact$bwl_jitt_col, size=10) +
-	geom_jitter(mapping=aes(fill=Team,size=1000/Econ))+
-	 geom_segment(aes(x=Player, 
-                   xend=Player, 
-                   y=min(Wkts), 
-                   yend=max(Wkts)), 
-               linetype="solid", 
-               size=0.1) +
-	labs( y="Wickets", x="Bowler")+
-	scale_fill_manual(values = col_fil) +
-	scale_size_continuous(range = c(2, 7))+
-	theme(plot.title=element_text(size=15, 
-                                    face="bold", 
-                                    family="Georgia",
-                                    color="black",
-                                    hjust=0.5,
-                                    lineheight=1.2),  # title
-              axis.title.y=element_text(f),  # Y axis title
-            axis.text.y=element_text(family="Georgia",
-                                 color="black",size=7,face="bold"),
-            panel.background = element_rect(fill = 'white'),
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_line(colour = "tomato", 
-                                          size=.25, 
-                                          linetype = "dashed"),
-          panel.border = element_blank(),
-          axis.line.x = element_line(colour = "darkorange", 
-                                     size=1.5, 
-                                     lineend = "butt"),
-          axis.line.y = element_line(colour = "darkorange", 
-                                     size=1.5)
-                                
-            ,legend.position = "None"
-           ) +
- coord_flip()
-p<-ggplotly(gg, tooltip = c("label1","label2","label3","label4","colour"))%>%layout(plot_bgcolor = 'rgb(243, 243, 243)',showlegend = FALSE)
-p
->>>>>>> 11eeecc5bce837967e968bb1155c7449ecdbb9ea
 })
 
 ```
